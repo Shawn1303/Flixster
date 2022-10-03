@@ -33,7 +33,7 @@ Here's a walkthrough of implemented user stories:
 <img src='https://imgur.com/OS9svzJ' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ScreenToGif
-GIF created with ...  
+GIF created with ScreenToGif
 <!-- Recommended tools:
 [Kap](https://getkap.co/) for macOS
 [ScreenToGif](https://www.screentogif.com/) for Windows
