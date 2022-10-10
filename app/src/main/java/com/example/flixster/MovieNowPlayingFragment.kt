@@ -28,7 +28,7 @@ import org.json.JSONObject
 
 private const val API_KEY = "afe50f44d03f4fe402a0c7648c92007a"
 
-class MovieNowPlayingFragment : Fragment(), OnListFragmentInteractionListener {
+class MovieNowPlayingFragment (private val maincontext: MainActivity): Fragment(), OnListFragmentInteractionListener {
 
     /*
      * Constructing the view
@@ -113,6 +113,14 @@ class MovieNowPlayingFragment : Fragment(), OnListFragmentInteractionListener {
      */
     override fun onItemClick(item: MovieNowPlaying) {
         Toast.makeText(context, "test: " + item.title, Toast.LENGTH_LONG).show()
+
+        val intent = Intent(maincontext, MovieReview::class.java)
+        intent.putExtra("movieImageUrl", item.movieImageURL)
+        intent.putExtra("movieTitle", item.title)
+        intent.putExtra("movieID", item.movieId)
+        maincontext.startActivity(intent)
+
+
 
         // Create and set up an AsyncHTTPClient() here
         val client = AsyncHttpClient()

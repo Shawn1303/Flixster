@@ -11,6 +11,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val supportFragmentManager = supportFragmentManager
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(id.content, MovieNowPlayingFragment(), null).commit()
+        fragmentTransaction.replace(id.content, MovieNowPlayingFragment(this@MainActivity), null).commit()
     }
 }

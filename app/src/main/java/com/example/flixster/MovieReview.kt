@@ -28,10 +28,10 @@ class MovieReview : AppCompatActivity() {
     val movieTitleTextView = findViewById<TextView>(R.id.movie_title)
     val movieReviewTextView = findViewById<TextView>(R.id.movie_review)
 
-    movieTitleTextView.text = intent.getStringExtra("movieTitle")
-    movieReviewTextView.text = intent.getStringExtra("moviereviewcontent")
+    movieTitleTextView.text = intent.getStringExtra("movieTitle").toString()
+    movieReviewTextView.text = intent.getStringExtra("moviereviewcontent").toString(
     Glide.with(this@MovieReview)
-        .load("https://image.tmdb.org/t/p/w500" + intent.getStringExtra("movieImageUrl"))
+        .load("https://image.tmdb.org/t/p/w500" + intent.getStringExtra("movieImageUrl").toString())
         .into(movieImageView)
 
 
