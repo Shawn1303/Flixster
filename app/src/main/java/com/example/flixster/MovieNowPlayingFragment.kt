@@ -1,5 +1,8 @@
 package com.example.flixster
 
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
@@ -18,6 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import okhttp3.Headers
+import org.json.JSONException
 import org.json.JSONObject
 
 
@@ -108,6 +113,66 @@ class MovieNowPlayingFragment : Fragment(), OnListFragmentInteractionListener {
      */
     override fun onItemClick(item: MovieNowPlaying) {
         Toast.makeText(context, "test: " + item.title, Toast.LENGTH_LONG).show()
+
+        // Create and set up an AsyncHTTPClient() here
+        val client = AsyncHttpClient()
+        val params = RequestParams()
+        val movieID = item.movieId.toString()
+        Log.i("MovieID", movieID)
+        params["api_key"] = API_KEY
+        // Using the client, perform the HTTP request
+        client["https://api.themoviedb.org/3/movie/$movieID/reviews", params, object : JsonHttpResponseHandler()
+        {
+            /*
+             * The onSuccess function gets called when
+             * HTTP response status is "200 OK"
+             */
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Headers?,
+                json: JsonHttpResponseHandler.JSON
+            ) {
+                Log.i("error", json.toString())
+                // The wait for a response is over
+//                        val resultsJSON : String = json.jsonObject.get("results") as JSONObject
+                val movieRawJSON : String = json.jsonObject.get("results").toString()
+                Log.i("showString", movieRawJSON)
+                val gson = Gson()
+                val movieReviewType = object : TypeToken<List<MovieReviewData>>() {}.type
+                val models : List<MovieReviewData> = gson.fromJson(movieRawJSON, movieReviewType)
+                val movieReview = models[0]
+                val content = movieReview.content
+                val author = movieReview.author
+
+                // Look for this in Logcat:
+                Log.d("MovieNowPlayingFragment", "response successful")
+                val intent = Intent(context, MovieReview::class.java)
+                intent.putExtra("movieImageUrl", item.movieImageURL)
+                intent.putExtra("movieTitle", item.title)
+                intent.putExtra("moviereviewauthor", author)
+                intent.putExtra("moviereviewcontent", content)
+                context?.startActivity(intent)
+            }
+
+            /*
+             * The onFailure function gets called when
+             * HTTP response status is "4XX" (eg. 401, 403, 404)
+             */
+            override fun onFailure(
+                statusCode: Int,
+                headers: Headers?,
+                errorResponse: String,
+                t: Throwable?
+            ) {
+                // The wait for a response is over
+
+                // If the error is not null, log it!
+                t?.message?.let {
+//                    Log.e("MovieNowPlayingFragment", errorResponse)
+                }
+            }
+        }]
+
     }
 
 }

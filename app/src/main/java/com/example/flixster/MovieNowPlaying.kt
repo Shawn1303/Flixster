@@ -11,4 +11,7 @@ class MovieNowPlaying {
 
     @SerializedName("poster_path")
     var movieImageURL:String? = null
+
+    @SerializedName("id")
+    var movieId:Int? = null
 }
